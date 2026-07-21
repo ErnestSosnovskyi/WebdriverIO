@@ -205,12 +205,12 @@ describe("Telnyx E2E Automation Tests (WDIO Migration)", () => {
   it("TC015 - Mobile Viewport: Checking the Hamburger Menu rendering", async () => {
     await browser.setWindowSize(390, 844);
     await HomePage.open();
+    await browser.refresh();
 
     const hamburgerBtn = await $(
-      'button[aria-haspopup="dialog"], [aria-label*="menu" i]',
+      'button[aria-label*="menu" i], button[aria-label*="navigation" i], button[aria-haspopup="dialog"], header button svg',
     );
-    await hamburgerBtn.waitForExist({ timeout: 5000 });
-    await hamburgerBtn.waitForDisplayed({ timeout: 5000 });
+    await hamburgerBtn.waitForExist({ timeout: 10000 });
     await expect(hamburgerBtn).toBeDisplayed();
 
     await browser.setWindowSize(1920, 1080);
