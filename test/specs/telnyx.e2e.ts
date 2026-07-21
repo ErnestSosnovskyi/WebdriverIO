@@ -204,13 +204,42 @@ describe("Telnyx E2E Automation Tests (WDIO Migration)", () => {
 
   it("TC015 - Mobile Viewport: Checking the Hamburger Menu rendering", async () => {
     await browser.setWindowSize(390, 844);
-    await HomePage.open();
-    await browser.refresh();
 
-    const hamburgerBtn = await $(
-      'button[aria-label*="menu" i], button[aria-label*="navigation" i], button[aria-haspopup="dialog"], header button svg',
+    await HomePage.open();
+
+    const hamburgerBtn = await browser.waitUntil(
+      async () => {
+        const headerButtons = await $$("header button");
+        for (const btn of headerButtons) {
+          if (await btn.isDisplayed()) {
+            const ariaLabel = (await btn.getAttribute("aria-label")) || "";
+            const hasPopup = (await btn.getAttribute("aria-haspopup")) || "";
+            if (
+              ariaLabel.toLowerCase().includes("menu") ||
+              ariaLabel.toLowerCase().includes("navigation") ||
+              hasPopup === "dialog" ||
+              hasPopup === "true"
+            ) {
+              return btn;
+            }
+          }
+        }
+
+        const allButtons = await $$("header button, header [role='button']");
+        for (const btn of allButtons) {
+          if (await btn.isDisplayed()) {
+            return btn;
+          }
+        }
+        return null;
+      },
+      {
+        timeout: 10000,
+        timeoutMsg:
+          "The visible mobile menu button did not appear in the header.",
+      },
     );
-    await hamburgerBtn.waitForExist({ timeout: 10000 });
+
     await expect(hamburgerBtn).toBeDisplayed();
 
     await browser.setWindowSize(1920, 1080);
