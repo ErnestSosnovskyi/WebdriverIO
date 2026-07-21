@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  wdio-tests:
+    build: .
+    image: telnyx-wdio-tests
+    container_name: telnyx-e2e
+    shm_size: '2gb'
+    volumes:
+      - ./allure-results:/app/allure-results
