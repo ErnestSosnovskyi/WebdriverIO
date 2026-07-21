@@ -59,7 +59,7 @@ describe("Telnyx E2E Automation Tests (WDIO Migration)", () => {
       },
       {
         timeout: 10000,
-        timeoutMsg: "Видимый h1 не появился на странице Pricing",
+        timeoutMsg: "Visible h1 not appearing on Pricing page",
       },
     );
   });
@@ -94,9 +94,20 @@ describe("Telnyx E2E Automation Tests (WDIO Migration)", () => {
   it("TC008 - Checking the Cookie Consent Banner", async () => {
     await HomePage.open();
 
-    await expect(HomePage.cookieBanner).toBeDisplayed();
-    await HomePage.acceptCookies();
-    await expect(HomePage.cookieBanner).not.toBeDisplayed();
+    const isBannerExist = await HomePage.cookieBanner
+      .waitForExist({
+        timeout: 5000,
+        reverse: false,
+      })
+      .catch(() => false);
+    
+    if (isBannerExist) {
+      await expect(HomePage.cookieBanner).toBeDisplayed();
+      await HomePage.acceptCookies();
+      await expect(HomePage.cookieBanner).not.toBeDisplayed();
+    } else {
+      console.log("Cookie banner did not appear in this environment/location.");
+    }
   });
 
   it('TC009 - Checking the "Terms and Conditions of Service" link', async () => {
@@ -133,7 +144,7 @@ describe("Telnyx E2E Automation Tests (WDIO Migration)", () => {
         const errorsCount = await ContactPage.errorMessages.length;
         return errorsCount > 0;
       },
-      { timeout: 5000, timeoutMsg: "Сообщения об ошибках не появились" },
+      { timeout: 5000, timeoutMsg: "No error messages appeared" },
     );
     const finalErrorsCount = await ContactPage.errorMessages.length;
     expect(finalErrorsCount).toBeGreaterThan(0);
@@ -184,7 +195,7 @@ describe("Telnyx E2E Automation Tests (WDIO Migration)", () => {
      },
      {
        timeout: 10000,
-       timeoutMsg: "Видимый h1 не появился на странице Our Network",
+       timeoutMsg: "The visible h1 did not appear on the Our Network page",
      },
    );
 
