@@ -40,7 +40,10 @@ class ContactPage extends Page {
     return super.open("contact-us");
   }
   public async submitForm() {
-    await this.jsClick(await this.submitBtn);
+    const btn = await this.submitBtn;
+    await btn.scrollIntoView();
+    await btn.waitForClickable();
+    await btn.click();
   }
 }
 export default new ContactPage();

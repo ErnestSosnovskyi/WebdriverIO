@@ -9,8 +9,23 @@ export default class Page {
         return browser.url(`/${path}`)
     }
 
-    public async jsClick(element: any) {
-        const resolvedElement = await element;
-        await browser.execute("arguments[0].click();", resolvedElement);
+    public async waitForVisibleH1(): Promise<string> {
+        let visibleText = '';
+        await browser.waitUntil(
+            async () => {
+                const headers = await $$('h1');
+                for (const header of headers) {
+                    if (await header.isDisplayed()) {
+                        visibleText = await header.getText();
+                        return true;
+                    }
+                }
+                return false;
+            },
+            {
+                timeoutMsg: 'No visible h1 heading found on the page',
+            }
+        );
+        return visibleText;
     }
 }
