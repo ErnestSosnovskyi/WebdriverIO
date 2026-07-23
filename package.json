@@ -7,8 +7,8 @@
     "test": "wdio run configs/wdio.conf.ts",
     "test:single": "wdio run configs/wdio.chrome.conf.ts --spec",
     "test:chrome": "wdio run configs/wdio.chrome.conf.ts",
-    "test:firefox": "wdio run configs/wdio.firefox.conf.ts",
     "test:edge": "wdio run configs/wdio.edge.conf.ts",
+    "test:firefox": "wdio run configs/wdio.firefox.conf.ts",
     "test:qa": "cross-env BASE_URL=https://qa.telnyx.com wdio run configs/wdio.chrome.conf.ts",
     "report:generate": "allure generate allure-results --clean",
     "report:open": "allure open"
